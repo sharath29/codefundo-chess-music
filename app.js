@@ -2,6 +2,17 @@ var game = new Chess();
 var board = new ChessBoard('board', {
   onSquareClick: onSquareClick
 });
+var synth = new Tone.Synth({
+  oscillator : {
+    type : 'triangle8'
+  },
+  envelope : {
+    attack : 2,
+    decay : 1,
+    sustain: 0.4,
+    release: 4
+  }
+}).toMaster()
 
 function onSquareClick(clickedSquare, selectedSquares) {
   if (selectedSquares.length === 0) {
@@ -53,8 +64,14 @@ function move(from, to, promotionShortPiece) {
     to: to,
     promotion: promotionShortPiece
   });
-
+  var time = Tone.context.currentTime
+  console.log(from[0].toUpperCase()+(from[1]-1).toString(),to[0].toUpperCase()+(to[1]-1).toString())
   board.setPosition(game.fen());
+
+  for(i=from[1]-1;i<to[1];++i){
+    var move = from[0].toUpperCase()+i.toString()
+    synth.triggerAttackRelease(move, 0.3, time++)
+  }
 
   randomMove();
 }
