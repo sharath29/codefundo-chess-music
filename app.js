@@ -67,10 +67,27 @@ function move(from, to, promotionShortPiece) {
   var time = Tone.context.currentTime
   console.log(from[0].toUpperCase()+(from[1]-1).toString(),to[0].toUpperCase()+(to[1]-1).toString())
   board.setPosition(game.fen());
-
+  temp = from[0]
+  
   for(i=from[1]-1;i<to[1];++i){
-    var move = from[0].toUpperCase()+i.toString()
-    synth.triggerAttackRelease(move, 0.3, time++)
+    count = 0
+    if(from[0] < to[0]){
+      if(temp < to[0])
+        temp = (String.fromCharCode(from[0].charCodeAt(0)+(count++)))
+    }
+    else if(from[0] > to[0]){
+      if(temp > to[0])
+        temp = (String.fromCharCode(from[0].charCodeAt(0)-(count++)))
+    }
+    var move = temp.toUpperCase()+i.toString()
+    if(move[0] == "H") move = "A" + (i+1)
+    console.log(move)
+    if(i<3)
+      synth.triggerAttackRelease(move, 0.3, time++)
+    else if(i<6)
+      synth.triggerAttackRelease(move, 0.2, time++)
+    else
+      synth.triggerAttackRelease(move, 0.1, time++)
   }
 
   randomMove();
