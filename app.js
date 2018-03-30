@@ -68,26 +68,50 @@ function move(from, to, promotionShortPiece) {
   console.log(from[0].toUpperCase()+(from[1]-1).toString(),to[0].toUpperCase()+(to[1]-1).toString())
   board.setPosition(game.fen());
   temp = from[0]
-  
-  for(i=from[1]-1;i<to[1];++i){
-    count = 0
-    if(from[0] < to[0]){
-      if(temp < to[0])
-        temp = (String.fromCharCode(from[0].charCodeAt(0)+(count++)))
+  console.log(from[1],to[1])
+  var count = -1
+  if(from[1]<to[1]){
+    for(i=from[1]-1;i<to[1];++i){
+      count = count + 1
+      if(from[0] < to[0]){
+        if(temp < to[0])
+          temp = (String.fromCharCode(from[0].charCodeAt()+count))
+      }
+      else if(from[0] > to[0]){
+        if(temp > to[0])
+          temp = (String.fromCharCode(from[0].charCodeAt()-count))
+      }
+      var move = temp.toUpperCase()+i.toString()
+      if(move[0] == "H") move = "A" + (i+1)
+      if(i<3)
+        synth.triggerAttackRelease(move, 0.3, time++)
+      else if(i<6)
+        synth.triggerAttackRelease(move, 0.2, time++)
+      else
+        synth.triggerAttackRelease(move, 0.1, time++)
     }
-    else if(from[0] > to[0]){
-      if(temp > to[0])
-        temp = (String.fromCharCode(from[0].charCodeAt(0)-(count++)))
+  }
+  else{
+    for(i=from[1]-1;i>=to[1]-1;--i){
+      count = 0
+      if(from[0] < to[0]){
+        if(temp < to[0])
+          temp = (String.fromCharCode(from[0].charCodeAt(0)+(count++)))
+      }
+      else if(from[0] > to[0]){
+        if(temp > to[0])
+          temp = (String.fromCharCode(from[0].charCodeAt(0)-(count++)))
+      }
+      var move = temp.toUpperCase()+i.toString()
+      if(move[0] == "H") move = "A" + (i+1)
+      console.log(move)
+      if(i<3)
+        synth.triggerAttackRelease(move, 0.3, time++)
+      else if(i<6)
+        synth.triggerAttackRelease(move, 0.2, time++)
+      else
+        synth.triggerAttackRelease(move, 0.1, time++)
     }
-    var move = temp.toUpperCase()+i.toString()
-    if(move[0] == "H") move = "A" + (i+1)
-    console.log(move)
-    if(i<3)
-      synth.triggerAttackRelease(move, 0.3, time++)
-    else if(i<6)
-      synth.triggerAttackRelease(move, 0.2, time++)
-    else
-      synth.triggerAttackRelease(move, 0.1, time++)
   }
 
   randomMove();
