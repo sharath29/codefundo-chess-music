@@ -66,16 +66,15 @@ function move(from, to, promotionShortPiece) {
   });
   //current time needed for the notes to know when to play tunes
   var time = Tone.context.currentTime
-  console.log(from[0].toUpperCase()+(from[1]-1).toString(),to[0].toUpperCase()+(to[1]-1).toString())
   board.setPosition(game.fen());
   temp = from[0]
-  console.log(from[1],to[1])
   //count ver used to increase or decrease to pitch ie sa re ga - ga re sa when pieces move horizontally
   var count = -1
   //horizontal direction octave sa0 re ga ma pa dha ni sa1, here sa1 has the same pitch when the s0 is scaled once to next higher octave scale 
   //vertical move does the scaling
   //forward move
   if(from[1]<to[1]){
+    console.log("forward")
     for(i=from[1]-1;i<to[1];++i){
       count = count + 1
       if(from[0] < to[0]){
@@ -98,29 +97,66 @@ function move(from, to, promotionShortPiece) {
         synth.triggerAttackRelease(move, 0.2, time++)
       else
         synth.triggerAttackRelease(move, 0.1, time++)
+      console.log(move)
     }
   }
   //backward move
-  else{
+  else if(from[1]>to[1]){
+    console.log("backward")
     for(i=from[1]-1;i>=to[1]-1;--i){
-      count = 0
+      count = count + 1
       if(from[0] < to[0]){
         if(temp < to[0])
-          temp = (String.fromCharCode(from[0].charCodeAt(0)+(count++)))
+          temp = (String.fromCharCode(from[0].charCodeAt(0)+count))
       }
       else if(from[0] > to[0]){
         if(temp > to[0])
-          temp = (String.fromCharCode(from[0].charCodeAt(0)-(count++)))
+          temp = (String.fromCharCode(from[0].charCodeAt(0)-count))
       }
       var move = temp.toUpperCase()+i.toString()
       if(move[0] == "H") move = "A" + (i+1)
-      console.log(move)
-      if(i<3)
+      if(i>=0 && i<3)
         synth.triggerAttackRelease(move, 0.3, time++)
-      else if(i<6)
+      else if(i>=3 && i<6)
         synth.triggerAttackRelease(move, 0.2, time++)
       else
         synth.triggerAttackRelease(move, 0.1, time++)
+      console.log(move)
+    }
+  }
+  else{
+    tempNum = Number(from[1])
+    console.log("horizontal")
+    if(from[0] < to[0]){
+      for(i=from[0].charCodeAt();i<=to[0].charCodeAt();++i){
+        count = count + 1
+        temp = (String.fromCharCode(from[0].charCodeAt(0)+count))
+        var move = temp.toUpperCase()+String.fromCharCode(from[1].charCodeAt(0)-1)
+        if(move[0] == "H") move = "A" + String.fromCharCode(from[1].charCodeAt(0))
+        console.log(move)
+        if(tempNum>=0 && tempNum<3)
+          synth.triggerAttackRelease(move, 0.3, time++)
+        else if(tempNum>=3 && tempNum<6)
+          synth.triggerAttackRelease(move, 0.2, time++)
+        else
+          synth.triggerAttackRelease(move, 0.1, time++)
+      }
+    }
+    else{
+      for(i=from[0].charCodeAt();i>=to[0].charCodeAt();--i){
+        count = count + 1
+        temp = (String.fromCharCode(from[0].charCodeAt(0)-count))
+        var move = temp.toUpperCase()+String.fromCharCode(from[1].charCodeAt(0)-1)
+        if(move[0] == "H") move = "A" + String.fromCharCode(from[1].charCodeAt(0))
+        console.log(move)
+        if(tempNum>=0 && tempNum<3)
+          synth.triggerAttackRelease(move, 0.3, time++)
+        else if(tempNum>=3 && tempNum<6)
+          synth.triggerAttackRelease(move, 0.2, time++)
+        else
+          synth.triggerAttackRelease(move, 0.1, time++)  
+
+      }
     }
   }
 
