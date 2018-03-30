@@ -64,12 +64,17 @@ function move(from, to, promotionShortPiece) {
     to: to,
     promotion: promotionShortPiece
   });
+  //current time needed for the notes to know when to play tunes
   var time = Tone.context.currentTime
   console.log(from[0].toUpperCase()+(from[1]-1).toString(),to[0].toUpperCase()+(to[1]-1).toString())
   board.setPosition(game.fen());
   temp = from[0]
   console.log(from[1],to[1])
+  //count ver used to increase or decrease to pitch ie sa re ga - ga re sa when pieces move horizontally
   var count = -1
+  //horizontal direction octave sa0 re ga ma pa dha ni sa1, here sa1 has the same pitch when the s0 is scaled once to next higher octave scale 
+  //vertical move does the scaling
+  //forward move
   if(from[1]<to[1]){
     for(i=from[1]-1;i<to[1];++i){
       count = count + 1
@@ -81,8 +86,12 @@ function move(from, to, promotionShortPiece) {
         if(temp > to[0])
           temp = (String.fromCharCode(from[0].charCodeAt()-count))
       }
+      //temp has the required notes to play but without the octave scaling ie (E1 or E2) temp has E, i contains the vertical value for scaling
       var move = temp.toUpperCase()+i.toString()
+      //there is no H in musical octave notation so the H file in chess board is assigned the next octave's first note ie sa1.
       if(move[0] == "H") move = "A" + (i+1)
+      //(note tune to play, time duration, when to play)
+  	  // duration for high pitched sounds reduced to make it more soothing
       if(i<3)
         synth.triggerAttackRelease(move, 0.3, time++)
       else if(i<6)
@@ -91,6 +100,7 @@ function move(from, to, promotionShortPiece) {
         synth.triggerAttackRelease(move, 0.1, time++)
     }
   }
+  //backward move
   else{
     for(i=from[1]-1;i>=to[1]-1;--i){
       count = 0
