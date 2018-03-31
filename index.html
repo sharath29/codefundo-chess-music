@@ -11,5 +11,12 @@
   <script src="chess.js"></script>
   <script src="chessboard.js"></script>
   <script src="app.js"></script>
+      <script>
+      var stockfish = new Worker('stockfish.js');
+		stockfish.postMessage('go depth 15');
+		stockfish.onmessage = function(event) {
+  		console.log(event.data);
+		};
+	  </script>
 </body>
 </html>
