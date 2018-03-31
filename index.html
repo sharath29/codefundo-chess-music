@@ -13,10 +13,6 @@
   <script src="app.js"></script>
       <script>
       var stockfish = new Worker('stockfish.js');
-		stockfish.postMessage('go depth 15');
-		stockfish.onmessage = function(event) {
-  		console.log("evaluation ",event.data.split(" ")[7]);
-		};
 	  </script>
 </body>
 </html>

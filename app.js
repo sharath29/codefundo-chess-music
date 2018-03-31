@@ -1,4 +1,5 @@
 var game = new Chess();
+var oppo = 0
 var board = new ChessBoard('board', {
   onSquareClick: onSquareClick
 });
@@ -104,16 +105,7 @@ function move(from, to, promotionShortPiece) {
 	// stockfish analysis
   	var cur_fen=game.fen();
   	console.log(cur_fen);
-		stockfish.postMessage('position fen '+cur_fen);
-		stockfish.postMessage('go depth 15');
-		stockfish.onmessage = function(event) {
-   //   if(event.data.split(" ")[2] < 16)
-    //		console.log("evaluation ",event.data.split(" ")[7]);
-      if(Number(event.data.split(" ")[2]) < 16)
-    		console.log("evaluation ",event.data.split(" ")[7]);
-      else
-        console.log(event.data)
-		};
+
   //current time needed for the notes to know when to play tunes
   var time = Tone.context.currentTime
   board.setPosition(game.fen());
@@ -214,11 +206,12 @@ function move(from, to, promotionShortPiece) {
 }
 
 function randomMove() {
+  oppo = 1
   var legalMoves = game.moves();
-
+  console.log(legalMoves)
   var randomIndex = Math.floor(Math.random() * legalMoves.length);
 
-  //game.move(legalMoves[randomIndex]);
+  game.move(legalMoves[randomIndex]);
   console.log("thismove"+legalMoves[randomIndex]);
   	var cur_fen=game.fen();
   	console.log(cur_fen);
@@ -226,17 +219,16 @@ function randomMove() {
 		stockfish.postMessage('go depth 15');
 		stockfish.onmessage = function(event) {
 ////some bug
-      if(event.data.split(" ")[2] < 16)
-    		if(event.data.split(" ")[2] == 15)
+    	console.log(event.data);
+      	if(event.data.split(" ")[0] == "bestmove")
 			{
-    			//console.log(event.data);
-    			console.log(event.data.split(" ")[17],{sloppy: true});
-    			game.move(event.data.split(" ")[17],{sloppy: true});
+    			// console.log(event.data.split(" ")[17].slice(2,4),{sloppy: true});
+    			game.move(event.data.split(" ")[1].slice(2,4));
 			}
-      if(Number(event.data.split(" ")[2]) < 16)
-    		console.log("evaluation ",event.data.split(" ")[7]);
-      else
-        console.log(event.data)
+      // if(Number(event.data.split(" ")[2]) < 16)
+    		// console.log("evaluation ",event.data.split(" ")[7]);
+      // else
+      //   console.log(event.data)
 		};
   board.setPosition(game.fen());
 
