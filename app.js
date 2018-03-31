@@ -96,19 +96,8 @@ function onSquareClick(clickedSquare, selectedSquares) {
   }
 }
 
-function move(from, to, promotionShortPiece) {
-  game.move({
-    from: from,
-    to: to,
-    promotion: promotionShortPiece
-  });
-	// stockfish analysis
-  	var cur_fen=game.fen();
-  	console.log(cur_fen);
-
-  //current time needed for the notes to know when to play tunes
+function generateSound(from,to){
   var time = Tone.context.currentTime
-  board.setPosition(game.fen());
   temp = from[0]
   //count ver used to increase or decrease to pitch ie sa re ga - ga re sa when pieces move horizontally
   var count = -1
@@ -132,7 +121,7 @@ function move(from, to, promotionShortPiece) {
       //there is no H in musical octave notation so the H file in chess board is assigned the next octave's first note ie sa1.
       if(move[0] == "H") move = "A" + (i+1)
       //(note tune to play, time duration, when to play)
-  	  // duration for high pitched sounds reduced to make it more soothing
+      // duration for high pitched sounds reduced to make it more soothing
       if(i<3)
         synth.triggerAttackRelease(move, 0.3, time+=interval)
       else if(i<6)
@@ -201,30 +190,44 @@ function move(from, to, promotionShortPiece) {
       }
     }
   }
+}
+
+function move(from, to, promotionShortPiece) {
+  game.move({
+    from: from,
+    to: to,
+    promotion: promotionShortPiece
+  });
+
+  // stockfish analysis
+  	var cur_fen=game.fen();
+  	console.log(cur_fen);
+
+  board.setPosition(game.fen());
+  generateSound(from,to)
 
   randomMove();
 }
 
 function randomMove() {
-  oppo = 1
   var legalMoves = game.moves();
-  console.log(legalMoves)
-  var randomIndex = Math.floor(Math.random() * legalMoves.length);
+  // console.log(legalMoves)
+  // var randomIndex = Math.floor(Math.random() * legalMoves.length);
 
   //game.move(legalMoves[randomIndex]);
-  console.log("thismove"+legalMoves[randomIndex]);
+  // console.log("thismove"+legalMoves[randomIndex]);
   	var cur_fen=game.fen();
   	console.log(cur_fen);
 		stockfish.postMessage('position fen '+cur_fen);
 		stockfish.postMessage('go depth 15');
 		stockfish.onmessage = function(event) {
-////some bug
-    	//console.log(event.data);
       	if(event.data.split(" ")[0] == "bestmove")
 			{
-    			// console.log(event.data.split(" ")[17].slice(2,4),{sloppy: true});
-    			game.move({ from : event.data.split(" ")[1].slice(0,2) , to :event.data.split(" ")[1].slice(2,4) , promotion :'q'});
-    			console.log(event.data.split(" ")[1].slice(0,2));
+          fromMove = event.data.split(" ")[1].slice(0,2)
+    			toMove = event.data.split(" ")[1].slice(2,4)
+          game.move({ from : fromMove , to :toMove , promotion :'q'});
+    			generateSound(fromMove,toMove)
+          // console.log(event.data.split(" ")[1].slice(0,2));
   				board.setPosition(game.fen());
 			}
       // if(Number(event.data.split(" ")[2]) < 16)
