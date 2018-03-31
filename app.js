@@ -107,8 +107,8 @@ function move(from, to, promotionShortPiece) {
 		stockfish.postMessage('position fen '+cur_fen);
 		stockfish.postMessage('go depth 15');
 		stockfish.onmessage = function(event) {
-      if(event.data.split(" ")[2] < 16)
-    		console.log("evaluation ",event.data.split(" ")[7]);
+   //   if(event.data.split(" ")[2] < 16)
+    //		console.log("evaluation ",event.data.split(" ")[7]);
 		};
   //current time needed for the notes to know when to play tunes
   var time = Tone.context.currentTime
@@ -214,14 +214,21 @@ function randomMove() {
 
   var randomIndex = Math.floor(Math.random() * legalMoves.length);
 
-  game.move(legalMoves[randomIndex]);
+  //game.move(legalMoves[randomIndex]);
+  console.log("thismove"+legalMoves[randomIndex]);
   	var cur_fen=game.fen();
   	console.log(cur_fen);
 		stockfish.postMessage('position fen '+cur_fen);
 		stockfish.postMessage('go depth 15');
 		stockfish.onmessage = function(event) {
       if(event.data.split(" ")[2] < 16)
-    		console.log("evaluation ",event.data.split(" ")[7]);
+    		//console.log("evaluation ",event.data.split(" ")[7]);
+    		if(event.data.split(" ")[2] == 15)
+			{
+    			//console.log(event.data);
+    			console.log(event.data.split(" ")[17],{sloppy: true});
+    			game.move(event.data.split(" ")[17],{sloppy: true});
+			}
 		};
   board.setPosition(game.fen());
 
