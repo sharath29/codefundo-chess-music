@@ -13,7 +13,7 @@ var board = new ChessBoard('board', {
 //     release: 4
 //   }
 // }).toMaster()
-
+var interval = 0.2
 var synth = new Tone.Sampler({
       'A0' : 'A0.[mp3|ogg]',
       'C1' : 'C1.[mp3|ogg]',
@@ -137,11 +137,11 @@ function move(from, to, promotionShortPiece) {
       //(note tune to play, time duration, when to play)
   	  // duration for high pitched sounds reduced to make it more soothing
       if(i<3)
-        synth.triggerAttackRelease(move, 0.3, time++)
+        synth.triggerAttackRelease(move, 0.3, time+=interval)
       else if(i<6)
-        synth.triggerAttackRelease(move, 0.2, time++)
+        synth.triggerAttackRelease(move, 0.2, time+=interval)
       else
-        synth.triggerAttackRelease(move, 0.1, time++)
+        synth.triggerAttackRelease(move, 0.1, time+=interval)
       console.log(move)
     }
   }
@@ -161,11 +161,11 @@ function move(from, to, promotionShortPiece) {
       var move = temp.toUpperCase()+i.toString()
       if(move[0] == "H") move = "A" + (i+1)
       if(i>=0 && i<3)
-        synth.triggerAttackRelease(move, 0.3, time++)
+        synth.triggerAttackRelease(move, 0.3, time+=interval)
       else if(i>=3 && i<6)
-        synth.triggerAttackRelease(move, 0.2, time++)
+        synth.triggerAttackRelease(move, 0.2, time+=interval)
       else
-        synth.triggerAttackRelease(move, 0.1, time++)
+        synth.triggerAttackRelease(move, 0.1, time+=interval)
       console.log(move)
     }
   }
@@ -180,11 +180,11 @@ function move(from, to, promotionShortPiece) {
         if(move[0] == "H") move = "A" + String.fromCharCode(from[1].charCodeAt(0))
         console.log(move)
         if(tempNum>=0 && tempNum<3)
-          synth.triggerAttackRelease(move, 0.3, time++)
+          synth.triggerAttackRelease(move, 0.3, time+=interval)
         else if(tempNum>=3 && tempNum<6)
-          synth.triggerAttackRelease(move, 0.2, time++)
+          synth.triggerAttackRelease(move, 0.2, time+=interval)
         else
-          synth.triggerAttackRelease(move, 0.1, time++)
+          synth.triggerAttackRelease(move, 0.1, time+=interval)
       }
     }
     else{
@@ -195,11 +195,11 @@ function move(from, to, promotionShortPiece) {
         if(move[0] == "H") move = "A" + String.fromCharCode(from[1].charCodeAt(0))
         console.log(move)
         if(tempNum>=0 && tempNum<3)
-          synth.triggerAttackRelease(move, 0.3, time++)
+          synth.triggerAttackRelease(move, 0.3, time+=interval)
         else if(tempNum>=3 && tempNum<6)
-          synth.triggerAttackRelease(move, 0.2, time++)
+          synth.triggerAttackRelease(move, 0.2, time+=interval)
         else
-          synth.triggerAttackRelease(move, 0.1, time++)  
+          synth.triggerAttackRelease(move, 0.1, time+=interval)  
 
       }
     }
