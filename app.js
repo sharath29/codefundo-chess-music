@@ -216,7 +216,7 @@ function randomMove() {
   	var cur_fen=game.fen();
   	console.log(cur_fen);
 		stockfish.postMessage('position fen '+cur_fen);
-		stockfish.postMessage('go depth 15');
+		stockfish.postMessage('go depth 100');
 		stockfish.onmessage = function(event) {
 ////some bug
     	console.log(event.data);
