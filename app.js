@@ -2,17 +2,54 @@ var game = new Chess();
 var board = new ChessBoard('board', {
   onSquareClick: onSquareClick
 });
-var synth = new Tone.Synth({
-  oscillator : {
-    type : 'triangle8'
-  },
-  envelope : {
-    attack : 2,
-    decay : 1,
-    sustain: 0.4,
-    release: 4
-  }
-}).toMaster()
+// var synth = new Tone.Synth({
+//   oscillator : {
+//     type : 'triangle8'
+//   },
+//   envelope : {
+//     attack : 2,
+//     decay : 1,
+//     sustain: 0.4,
+//     release: 4
+//   }
+// }).toMaster()
+
+var synth = new Tone.Sampler({
+      'A0' : 'A0.[mp3|ogg]',
+      'C1' : 'C1.[mp3|ogg]',
+      'D#1' : 'Ds1.[mp3|ogg]',
+      'F#1' : 'Fs1.[mp3|ogg]',
+      'A1' : 'A1.[mp3|ogg]',
+      'C2' : 'C2.[mp3|ogg]',
+      'D#2' : 'Ds2.[mp3|ogg]',
+      'F#2' : 'Fs2.[mp3|ogg]',
+      'A2' : 'A2.[mp3|ogg]',
+      'C3' : 'C3.[mp3|ogg]',
+      'D#3' : 'Ds3.[mp3|ogg]',
+      'F#3' : 'Fs3.[mp3|ogg]',
+      'A3' : 'A3.[mp3|ogg]',
+      'C4' : 'C4.[mp3|ogg]',
+      'D#4' : 'Ds4.[mp3|ogg]',
+      'F#4' : 'Fs4.[mp3|ogg]',
+      'A4' : 'A4.[mp3|ogg]',
+      'C5' : 'C5.[mp3|ogg]',
+      'D#5' : 'Ds5.[mp3|ogg]',
+      'F#5' : 'Fs5.[mp3|ogg]',
+      'A5' : 'A5.[mp3|ogg]',
+      'C6' : 'C6.[mp3|ogg]',
+      'D#6' : 'Ds6.[mp3|ogg]',
+      'F#6' : 'Fs6.[mp3|ogg]',
+      'A6' : 'A6.[mp3|ogg]',
+      'C7' : 'C7.[mp3|ogg]',
+      'D#7' : 'Ds7.[mp3|ogg]',
+      'F#7' : 'Fs7.[mp3|ogg]',
+      'A7' : 'A7.[mp3|ogg]',
+      'C8' : 'C8.[mp3|ogg]'
+    }, {
+      'release' : 1,
+      'baseUrl' : './audio/salamander/'
+    }).toMaster();
+
 
 function onSquareClick(clickedSquare, selectedSquares) {
   if (selectedSquares.length === 0) {
@@ -64,6 +101,7 @@ function move(from, to, promotionShortPiece) {
     to: to,
     promotion: promotionShortPiece
   });
+	// stockfish analysis
   	var cur_fen=game.fen();
   	console.log(cur_fen);
 		stockfish.postMessage('position fen '+cur_fen);
@@ -71,13 +109,17 @@ function move(from, to, promotionShortPiece) {
 		stockfish.onmessage = function(event) {
   		console.log(event.data);
 		};
+  //current time needed for the notes to know when to play tunes
   var time = Tone.context.currentTime
-  console.log(from[0].toUpperCase()+(from[1]-1).toString(),to[0].toUpperCase()+(to[1]-1).toString())
   board.setPosition(game.fen());
   temp = from[0]
-  console.log(from[1],to[1])
+  //count ver used to increase or decrease to pitch ie sa re ga - ga re sa when pieces move horizontally
   var count = -1
+  //horizontal direction octave sa0 re ga ma pa dha ni sa1, here sa1 has the same pitch when the s0 is scaled once to next higher octave scale 
+  //vertical move does the scaling
+  //forward move
   if(from[1]<to[1]){
+    console.log("forward")
     for(i=from[1]-1;i<to[1];++i){
       count = count + 1
       if(from[0] < to[0]){
@@ -88,36 +130,78 @@ function move(from, to, promotionShortPiece) {
         if(temp > to[0])
           temp = (String.fromCharCode(from[0].charCodeAt()-count))
       }
+      //temp has the required notes to play but without the octave scaling ie (E1 or E2) temp has E, i contains the vertical value for scaling
       var move = temp.toUpperCase()+i.toString()
+      //there is no H in musical octave notation so the H file in chess board is assigned the next octave's first note ie sa1.
       if(move[0] == "H") move = "A" + (i+1)
+      //(note tune to play, time duration, when to play)
+  	  // duration for high pitched sounds reduced to make it more soothing
       if(i<3)
         synth.triggerAttackRelease(move, 0.3, time++)
       else if(i<6)
         synth.triggerAttackRelease(move, 0.2, time++)
       else
         synth.triggerAttackRelease(move, 0.1, time++)
+      console.log(move)
     }
   }
-  else{
+  //backward move
+  else if(from[1]>to[1]){
+    console.log("backward")
     for(i=from[1]-1;i>=to[1]-1;--i){
-      count = 0
+      count = count + 1
       if(from[0] < to[0]){
         if(temp < to[0])
-          temp = (String.fromCharCode(from[0].charCodeAt(0)+(count++)))
+          temp = (String.fromCharCode(from[0].charCodeAt(0)+count))
       }
       else if(from[0] > to[0]){
         if(temp > to[0])
-          temp = (String.fromCharCode(from[0].charCodeAt(0)-(count++)))
+          temp = (String.fromCharCode(from[0].charCodeAt(0)-count))
       }
       var move = temp.toUpperCase()+i.toString()
       if(move[0] == "H") move = "A" + (i+1)
-      console.log(move)
-      if(i<3)
+      if(i>=0 && i<3)
         synth.triggerAttackRelease(move, 0.3, time++)
-      else if(i<6)
+      else if(i>=3 && i<6)
         synth.triggerAttackRelease(move, 0.2, time++)
       else
         synth.triggerAttackRelease(move, 0.1, time++)
+      console.log(move)
+    }
+  }
+  else{
+    tempNum = Number(from[1])
+    console.log("horizontal")
+    if(from[0] < to[0]){
+      for(i=from[0].charCodeAt();i<=to[0].charCodeAt();++i){
+        count = count + 1
+        temp = (String.fromCharCode(from[0].charCodeAt(0)+count))
+        var move = temp.toUpperCase()+String.fromCharCode(from[1].charCodeAt(0)-1)
+        if(move[0] == "H") move = "A" + String.fromCharCode(from[1].charCodeAt(0))
+        console.log(move)
+        if(tempNum>=0 && tempNum<3)
+          synth.triggerAttackRelease(move, 0.3, time++)
+        else if(tempNum>=3 && tempNum<6)
+          synth.triggerAttackRelease(move, 0.2, time++)
+        else
+          synth.triggerAttackRelease(move, 0.1, time++)
+      }
+    }
+    else{
+      for(i=from[0].charCodeAt();i>=to[0].charCodeAt();--i){
+        count = count + 1
+        temp = (String.fromCharCode(from[0].charCodeAt(0)-count))
+        var move = temp.toUpperCase()+String.fromCharCode(from[1].charCodeAt(0)-1)
+        if(move[0] == "H") move = "A" + String.fromCharCode(from[1].charCodeAt(0))
+        console.log(move)
+        if(tempNum>=0 && tempNum<3)
+          synth.triggerAttackRelease(move, 0.3, time++)
+        else if(tempNum>=3 && tempNum<6)
+          synth.triggerAttackRelease(move, 0.2, time++)
+        else
+          synth.triggerAttackRelease(move, 0.1, time++)  
+
+      }
     }
   }
 
