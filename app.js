@@ -211,19 +211,21 @@ function randomMove() {
   console.log(legalMoves)
   var randomIndex = Math.floor(Math.random() * legalMoves.length);
 
-  game.move(legalMoves[randomIndex]);
+  //game.move(legalMoves[randomIndex]);
   console.log("thismove"+legalMoves[randomIndex]);
   	var cur_fen=game.fen();
   	console.log(cur_fen);
 		stockfish.postMessage('position fen '+cur_fen);
-		stockfish.postMessage('go depth 100');
+		stockfish.postMessage('go depth 15');
 		stockfish.onmessage = function(event) {
 ////some bug
-    	console.log(event.data);
+    	//console.log(event.data);
       	if(event.data.split(" ")[0] == "bestmove")
 			{
     			// console.log(event.data.split(" ")[17].slice(2,4),{sloppy: true});
-    			game.move(event.data.split(" ")[1].slice(2,4));
+    			game.move({ from : event.data.split(" ")[1].slice(0,2) , to :event.data.split(" ")[1].slice(2,4) , promotion :'q'});
+    			console.log(event.data.split(" ")[1].slice(0,2));
+  				board.setPosition(game.fen());
 			}
       // if(Number(event.data.split(" ")[2]) < 16)
     		// console.log("evaluation ",event.data.split(" ")[7]);
