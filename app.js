@@ -109,6 +109,8 @@ function move(from, to, promotionShortPiece) {
 		stockfish.onmessage = function(event) {
       if(Number(event.data.split(" ")[2]) < 16)
     		console.log("evaluation ",event.data.split(" ")[7]);
+      else
+        console.log(event.data)
 		};
   //current time needed for the notes to know when to play tunes
   var time = Tone.context.currentTime
@@ -222,6 +224,8 @@ function randomMove() {
 		stockfish.onmessage = function(event) {
       if(Number(event.data.split(" ")[2]) < 16)
     		console.log("evaluation ",event.data.split(" ")[7]);
+      else
+        console.log(event.data)
 		};
   board.setPosition(game.fen());
 
