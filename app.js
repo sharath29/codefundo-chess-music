@@ -107,7 +107,7 @@ function move(from, to, promotionShortPiece) {
 		stockfish.postMessage('position fen '+cur_fen);
 		stockfish.postMessage('go depth 15');
 		stockfish.onmessage = function(event) {
-      if(event.data.split(" ")[2] < 16)
+      if(Number(event.data.split(" ")[2]) < 16)
     		console.log("evaluation ",event.data.split(" ")[7]);
 		};
   //current time needed for the notes to know when to play tunes
@@ -220,7 +220,7 @@ function randomMove() {
 		stockfish.postMessage('position fen '+cur_fen);
 		stockfish.postMessage('go depth 15');
 		stockfish.onmessage = function(event) {
-      if(event.data.split(" ")[2] < 16)
+      if(Number(event.data.split(" ")[2]) < 16)
     		console.log("evaluation ",event.data.split(" ")[7]);
 		};
   board.setPosition(game.fen());
