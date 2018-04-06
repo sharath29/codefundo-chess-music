@@ -1,4 +1,6 @@
+var firebaseRef = firebase.database().ref()
 var game = new Chess();
+var NoteArray = [] 
 var oppo = 0
 var board = new ChessBoard('board', {
   onSquareClick: onSquareClick
@@ -191,6 +193,9 @@ function generateSound(from,to){
     }
   }
 }
+function storeNote(from,to){
+	NoteArray.push(from + "," + to);
+}
 
 function move(from, to, promotionShortPiece) {
   game.move({
@@ -205,9 +210,23 @@ function move(from, to, promotionShortPiece) {
 
   board.setPosition(game.fen());
   generateSound(from,to)
-
+  storeNote(from,to);
   randomMove();
 }
+
+
+
+function playNotes(){
+	for(let i=0;i<=NoteArray.length;++i){
+		// var from = NoteArray[i].split(",")[0]
+		// var to = NoteArray[i].split(",")[1]
+		if(i == 0)
+			firebaseRef.child("length").set(NoteArray.length)
+		else
+			firebaseRef.child(i.toString()).set(NoteArray[i])
+	} 
+}
+
 
 function randomMove() {
   var legalMoves = game.moves();
@@ -227,9 +246,21 @@ function randomMove() {
     			toMove = event.data.split(" ")[1].slice(2,4)
           game.move({ from : fromMove , to :toMove , promotion :'q'});
     			generateSound(fromMove,toMove)
+  				storeNote(fromMove,toMove);
+
           // console.log(event.data.split(" ")[1].slice(0,2));
   				board.setPosition(game.fen());
 			}
+	board.setPosition(game.fen());
+
+	 if (game.game_over()) {
+    	if (game.in_checkmate()) {
+      		alert('You ' + (game.turn() === 'w' ? 'lost' : 'won'));
+    	} else {
+      		alert('It\'s a draw');
+    	}
+    	// playNotes()  
+  	}
       // if(Number(event.data.split(" ")[2]) < 16)
     		// console.log("evaluation ",event.data.split(" ")[7]);
       // else
