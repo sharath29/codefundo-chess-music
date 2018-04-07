@@ -87,27 +87,11 @@
 <div class="dropdown">
   <span>Chess Games</span>
   <div class="dropdown-content">
+	  {% for i in {{ children }} %}
+	  <li>{{ i.key }}
+	  {% endfor %}
   </div>
 </div>
-
-<script>
-var query = firebase.database().ref().orderByKey();
-query.once("value")
-  .then(function(snapshot) {
-    snapshot.forEach(function(childSnapshot) {
-      var key = childSnapshot.key;
-      var childData = childSnapshot;
-      console.log(childData.key)
-      var para = document.createElement("p");
-      var node = document.createTextNode(childData.key);
-      para.appendChild(node);
-  });
-});
-var element = document.getElementByClass("dropdown-content");
-element.appendChild(para);
-</script>
-
-
 
  
 

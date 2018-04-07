@@ -1,7 +1,22 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
+import pyrebase
 
 # Create your views here.
 def index(request):
-    return render(request,'chess_music/index.html')
+    config = {
+    "apiKey": "AIzaSyBoFfC1va0c9vhgSbVntIWzDC-jtxVV6HI",
+    "authDomain": "chess-app-cbfb0.firebaseapp.com",
+    "databaseURL": "https://chess-app-cbfb0.firebaseio.com",
+    "storageBucket": "chess-app-cbfb0.appspot.com",
+    "projectId": "chess-app-cbfb0",
+    "messagingSenderId": "1089239373610"
+    }
+    firebase = pyrebase.initialize_app(config)
+    db=firebase.database()
+    print(db.child("users"))
+    context={
+            'children':db.child("users")
+            }
+    return render(request,'chess_music/index.html',context)
