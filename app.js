@@ -223,11 +223,22 @@ function playNotes(){
 		// var from = NoteArray[i].split(",")[0]
 		// var to = NoteArray[i].split(",")[1]
 		console.log(i)
-		if(i == 0)
-			firebaseRef.child("length").set(NoteArray.length)
+		if(i == 0){
+			var name = prompt("game name: [Date-WhitePlayer-BlackPlayer]");
+			firebaseRef.child(name).child("length").set(NoteArray.length)
+		}
 		else
-			firebaseRef.child(i.toString()).set(NoteArray[i])
+			firebaseRef.child(name).child(i.toString()).set(NoteArray[i-1])
 	} 
+}
+
+
+function saveMusic() {
+
+}
+
+function listenMusic() {
+
 }
 
 
@@ -262,7 +273,13 @@ function randomMove() {
     	} else {
       		alert('It\'s a draw');
     	}
-    	playNotes()  
+ 
+		var person = prompt("save yes/no");
+		if (person == "yes") {
+			playNotes()  
+			alert("saved")
+		}
+		
   	}
       // if(Number(event.data.split(" ")[2]) < 16)
     		// console.log("evaluation ",event.data.split(" ")[7]);

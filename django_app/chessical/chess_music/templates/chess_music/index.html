@@ -23,13 +23,10 @@
   firebase.initializeApp(config);
 
   var synth = new Tone.Sampler({
-      'A0' : 'A0.[mp3|ogg]',
-      'C1' : 'C1.[mp3|ogg]',
       'D#1' : 'Ds1.[mp3|ogg]',
       'F#1' : 'Fs1.[mp3|ogg]',
       'A1' : 'A1.[mp3|ogg]',
       'C2' : 'C2.[mp3|ogg]',
-      'D#2' : 'Ds2.[mp3|ogg]',
       'F#2' : 'Fs2.[mp3|ogg]',
       'A2' : 'A2.[mp3|ogg]',
       'C3' : 'C3.[mp3|ogg]',
@@ -66,6 +63,59 @@
   <script>var stockfish = new Worker("{% static 'chess_music/stockfish.js' %}")</script> 
 
 
+<style>
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+</style>
+
+<div class="dropdown">
+  <span>Chess Games</span>
+  <div class="dropdown-content">
+  </div>
+</div>
+
+<script>
+var query = firebase.database().ref().orderByKey();
+query.once("value")
+  .then(function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      var key = childSnapshot.key;
+      var childData = childSnapshot;
+      console.log(childData.key)
+      var para = document.createElement("p");
+      var node = document.createTextNode(childData.key);
+      para.appendChild(node);
+  });
+});
+var element = document.getElementByClass("dropdown-content");
+element.appendChild(para);
+</script>
+
+
+
+ 
+
+
+
 
 </body>
 </html>
+
+
+

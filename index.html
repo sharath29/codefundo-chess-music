@@ -27,6 +27,50 @@
   <script>var stockfish = new Worker('stockfish.js')</script> 
 
 
+<style>
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+</style>
+
+<script>
+var query = firebase.database().ref().orderByKey();
+query.once("value")
+  .then(function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      var key = childSnapshot.key;
+      var childData = childSnapshot.val();
+
+  });
+});
+</script>
+
+
+
+<div class="dropdown">
+  <span>Chess Games</span>
+  <div class="dropdown-content">
+    <p>hi</p>
+  </div>
+</div>
+ 
+
+
 
 </body>
 </html>
