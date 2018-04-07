@@ -57,9 +57,12 @@ var synth = new Tone.Sampler({
       'baseUrl' : './audio/salamander/'
     }).toMaster();
 
+
+
+
 function generateSound(from,to){
   var time = Tone.context.currentTime
-  temp = from[0]
+  var temp = from[0]
   var count = -1
   if(from[1]<to[1]){
     for(i=from[1]-1;i<to[1];++i){
@@ -137,14 +140,98 @@ function generateSound(from,to){
   }
 }
 
+
+var list = []
 var firebaseSound = firebase.database().ref();
 firebaseSound.on('value',function(datasnapshot){
   var len = datasnapshot.child("length").val()
-  for(i=0;i<len;++i){
+  for(var i=0;i<len;++i){
     console.log(datasnapshot.child(i).val())
-    var from = datasnapshot.child(i).val().split(",")[0]
-    var to = datasnapshot.child(i).val().split(",")[1]
-    generateSound(from,to)
+    list.push(datasnapshot.child(i).val())
+  }
+  console.log(list)
+  console.log("loaded")
+    var time = Tone.context.currentTime
+  for(let i=0;i<list.length;++i){
+    console.log(i)
+    var from = list[i].split(",")[0]
+    var to = list[i].split(",")[1]
+    var temp = from[0]
+    var count = -1
+    if(from[1]<to[1]){
+      for(let i=from[1]-1;i<to[1];++i){
+        count = count + 1
+        if(from[0] < to[0]){
+          if(temp < to[0])
+            temp = (String.fromCharCode(from[0].charCodeAt()+count))
+        }
+        else if(from[0] > to[0]){
+          if(temp > to[0])
+            temp = (String.fromCharCode(from[0].charCodeAt()-count))
+        }
+        let move = temp.toUpperCase()+i.toString()
+        if(move[0] == "H") move = "A" + (i+1)
+        if(i<3)
+          synth.triggerAttackRelease(move, 0.3, time+=interval)
+        else if(i<6)
+          synth.triggerAttackRelease(move, 0.2, time+=interval)
+        else
+          synth.triggerAttackRelease(move, 0.1, time+=interval)
+      }
+    }
+    else if(from[1]>to[1]){
+      for(let i=from[1]-1;i>=to[1]-1;--i){
+        count = count + 1
+        if(from[0] < to[0]){
+          if(temp < to[0])
+            temp = (String.fromCharCode(from[0].charCodeAt(0)+count))
+        }
+        else if(from[0] > to[0]){
+          if(temp > to[0])
+            temp = (String.fromCharCode(from[0].charCodeAt(0)-count))
+        }
+        let move = temp.toUpperCase()+i.toString()
+        if(move[0] == "H") move = "A" + (i+1)
+        if(i>=0 && i<3)
+          synth.triggerAttackRelease(move, 0.3, time+=interval)
+        else if(i>=3 && i<6)
+          synth.triggerAttackRelease(move, 0.2, time+=interval)
+        else
+          synth.triggerAttackRelease(move, 0.1, time+=interval)
+      }
+    }
+    else{
+      tempNum = Number(from[1])
+      if(from[0] < to[0]){
+        for(let i=from[0].charCodeAt();i<=to[0].charCodeAt();++i){
+          count = count + 1
+          temp = (String.fromCharCode(from[0].charCodeAt(0)+count))
+          let move = temp.toUpperCase()+String.fromCharCode(from[1].charCodeAt(0)-1)
+          if(move[0] == "H") move = "A" + String.fromCharCode(from[1].charCodeAt(0))
+          if(tempNum>=0 && tempNum<3)
+            synth.triggerAttackRelease(move, 0.3, time+=interval)
+          else if(tempNum>=3 && tempNum<6)
+            synth.triggerAttackRelease(move, 0.2, time+=interval)
+          else
+            synth.triggerAttackRelease(move, 0.1, time+=interval)
+        }
+      }
+      else{
+        for(let i=from[0].charCodeAt();i>=to[0].charCodeAt();--i){
+          count = count + 1
+          temp = (String.fromCharCode(from[0].charCodeAt(0)-count))
+          let move = temp.toUpperCase()+String.fromCharCode(from[1].charCodeAt(0)-1)
+          if(move[0] == "H") move = "A" + String.fromCharCode(from[1].charCodeAt(0))
+          if(tempNum>=0 && tempNum<3)
+            synth.triggerAttackRelease(move, 0.3, time+=interval)
+          else if(tempNum>=3 && tempNum<6)
+            synth.triggerAttackRelease(move, 0.2, time+=interval)
+          else
+            synth.triggerAttackRelease(move, 0.1, time+=interval)  
+
+        }
+      }
+    }
   }
 });
 

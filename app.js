@@ -220,6 +220,7 @@ function playNotes(){
 	for(let i=0;i<=NoteArray.length;++i){
 		// var from = NoteArray[i].split(",")[0]
 		// var to = NoteArray[i].split(",")[1]
+		console.log(i)
 		if(i == 0)
 			firebaseRef.child("length").set(NoteArray.length)
 		else
@@ -259,7 +260,7 @@ function randomMove() {
     	} else {
       		alert('It\'s a draw');
     	}
-    	// playNotes()  
+    	playNotes()  
   	}
       // if(Number(event.data.split(" ")[2]) < 16)
     		// console.log("evaluation ",event.data.split(" ")[7]);
