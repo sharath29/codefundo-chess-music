@@ -75,6 +75,8 @@ function onSquareClick(clickedSquare, selectedSquares) {
   var clickedPieceObject = game.get(clickedSquare);
   var selectedPieceObject = game.get(selectedSquare);
 
+  // console.log("selected piece",selectedPieceObject)
+
   if (clickedPieceObject && (clickedPieceObject.color === selectedPieceObject.color)) {
     board.selectSquare(clickedSquare);
     return;
