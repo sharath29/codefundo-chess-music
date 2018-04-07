@@ -1,1 +1,33 @@
-gg
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Chessboard</title>
+  <link href="{% static "chess_music/chessboard.css" %}" rel="stylesheet">
+  <script src="{% static "chess_music/Tone.js" %}"></script>
+</head>
+<body>
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBoFfC1va0c9vhgSbVntIWzDC-jtxVV6HI",
+    authDomain: "chess-app-cbfb0.firebaseapp.com",
+    databaseURL: "https://chess-app-cbfb0.firebaseio.com",
+    projectId: "chess-app-cbfb0",
+    storageBucket: "chess-app-cbfb0.appspot.com",
+    messagingSenderId: "1089239373610"
+  };
+  firebase.initializeApp(config);
+</script>
+  <div id="board"></div>
+  <script src="{% static "chess_music/chess.js" %}"></script>
+  <script src="{% static "chess_music/chessboard.js" %}"></script>
+  <script src="{% static "chess_music/app.js" %}"></script>
+  <script>var stockfish = new Worker('stockfish.js')</script> 
+
+
+
+</body>
+</html>
