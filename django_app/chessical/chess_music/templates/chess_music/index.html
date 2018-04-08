@@ -84,14 +84,21 @@
 }
 </style>
 
-<div class="dropdown">
-  <span>Chess Games</span>
-  <div class="dropdown-content">
-	  {% for i in games %}
-	  <li>{{ i.0 }}</li>
-	  {% endfor %}
-  </div>
-</div>
+ <form id="Games" method="POST">
+ 	 {% csrf_token %}
+       <fieldset>
+          <legend>Selecting Game</legend>
+          <p>
+             <label>Games</label>
+             <select id = "GameList" name="GameList">
+	  			{% for i in games %}
+				<option value = {{ i.0 }}>{{ i.0 }}</option>
+	  			{% endfor %}
+             </select>
+          </p>
+       </fieldset>
+       <input type="submit" class="btn" value="go!" name="mybtn">
+    </form>
 
  
 

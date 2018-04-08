@@ -5,4 +5,5 @@ from . import views
 app_name="chess_music"
 urlpatterns = [
         path('',views.index,name="index"),
+        path('',views.musicPlayer,name="musicPlayer"),
         ]
