@@ -56,11 +56,11 @@
     }).toMaster();
 
 </script>
-  <div id="board"></div>
-  <script src="{% static "chess_music/chess.js" %}"></script>
-  <script src="{% static "chess_music/chessboard.js" %}"></script>
-  <script src="{% static "chess_music/app.js" %}"></script>
-  <script>var stockfish = new Worker("{% static 'chess_music/stockfish.js' %}")</script> 
+  <!-- <div id="board"></div> -->
+  <!-- <script src="{% static "chess_music/chess.js" %}"></script> -->
+  <!-- <script src="{% static "chess_music/chessboard.js" %}"></script> -->
+  <!-- <script src="{% static "chess_music/app.js" %}"></script> -->
+  <!-- <script>var stockfish = new Worker("{% static 'chess_music/stockfish.js' %}")</script>  -->
 
 
 <style>
@@ -87,8 +87,8 @@
 <div class="dropdown">
   <span>Chess Games</span>
   <div class="dropdown-content">
-	  {% for i in {{ children }} %}
-	  <li>{{ i.key }}
+	  {% for i in games %}
+	  <li>{{ i.0 }}</li>
 	  {% endfor %}
   </div>
 </div>
