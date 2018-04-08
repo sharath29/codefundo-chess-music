@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
   <meta charset="utf-8">
@@ -6,6 +7,7 @@
   <script src="{% static "chess_music/Tone.js" %}"></script>
 </head>
 <body>
+{{ game }}
 <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
 <script>
   // Initialize Firebase
@@ -54,7 +56,7 @@ var synth = new Tone.Sampler({
       'C8' : 'C8.[mp3|ogg]'
     }, {
       'release' : 1,
-      'baseUrl' : './audio/salamander/'
+      'baseUrl' : "{% static 'chess_music/audio/salamander/' %}"
     }).toMaster();
 
 
@@ -143,7 +145,7 @@ function generateSound(from,to){
 
 var list = []
 var firebaseSound = firebase.database().ref();
-firebaseSound.on('value',function(datasnapshot){
+		firebaseSound.child({{ game }}).on('value',function(datasnapshot){
   var len = datasnapshot.child("length").val()
   for(var i=0;i<len;++i){
     console.log(datasnapshot.child(i).val())

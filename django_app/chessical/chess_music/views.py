@@ -7,7 +7,10 @@ import pyrebase
 def index(request):
     if request.method=='POST':
         game=request.POST.get('GameList') 
-        return render(request,'chess_music/musicPlayer.html')
+        context = {
+        'game':game
+        }
+        return render(request,'chess_music/musicPlayer.html',context)
 
         return HttpResponse(game) 
     config = {
