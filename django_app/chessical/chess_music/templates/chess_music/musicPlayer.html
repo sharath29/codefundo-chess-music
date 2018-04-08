@@ -7,7 +7,6 @@
   <script src="{% static "chess_music/Tone.js" %}"></script>
 </head>
 <body>
-{{ game }}
 <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
 <script>
   // Initialize Firebase
@@ -147,7 +146,7 @@ var list = []
 var firebaseSound = firebase.database().ref();
 		firebaseSound.child({{ game }}).on('value',function(datasnapshot){
   var len = datasnapshot.child("length").val()
-  for(var i=0;i<len;++i){
+  for(var i=1;i<=len;++i){
     console.log(datasnapshot.child(i).val())
     list.push(datasnapshot.child(i).val())
   }

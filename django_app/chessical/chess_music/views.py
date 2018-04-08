@@ -7,12 +7,13 @@ import pyrebase
 def index(request):
     if request.method=='POST':
         game=request.POST.get('GameList') 
-        context = {
-        'game':game
-        }
-        return render(request,'chess_music/musicPlayer.html',context)
+        if(game!=None):
+            context = {
+            'game':game
+            }
+            return render(request,'chess_music/musicPlayer.html',context)
 
-        return HttpResponse(game) 
+            return HttpResponse(game) 
     config = {
     "apiKey": "AIzaSyBoFfC1va0c9vhgSbVntIWzDC-jtxVV6HI",
     "authDomain": "chess-app-cbfb0.firebaseapp.com",

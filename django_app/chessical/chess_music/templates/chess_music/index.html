@@ -56,11 +56,11 @@
     }).toMaster();
 
 </script>
-  <!-- <div id="board"></div> -->
-  <!-- <script src="{% static "chess_music/chess.js" %}"></script> -->
-  <!-- <script src="{% static "chess_music/chessboard.js" %}"></script> -->
-  <!-- <script src="{% static "chess_music/app.js" %}"></script> -->
-  <!-- <script>var stockfish = new Worker("{% static 'chess_music/stockfish.js' %}")</script>  -->
+   <div id="board" style="float:left;"></div> -->
+   <script src="{% static "chess_music/chess.js" %}"></script> -->
+   <script src="{% static "chess_music/chessboard.js" %}"></script> -->
+   <script src="{% static "chess_music/app.js" %}"></script> -->
+   <script>var stockfish = new Worker("{% static 'chess_music/stockfish.js' %}")</script>  -->
 
 
 <style>
@@ -84,10 +84,11 @@
 }
 </style>
 
+<center>
  <form id="Games" method="POST">
  	 {% csrf_token %}
        <fieldset>
-          <legend>Selecting Game</legend>
+          <legend>choose a game from the database</legend>
           <p>
              <label>Games</label>
              <select id = "GameList" name="GameList">
@@ -99,8 +100,17 @@
        </fieldset>
        <input type="submit" class="btn" value="go!" name="mybtn">
     </form>
-
+</center>
  
+<center>
+ <form id="upload" method="POST">
+ 	 {% csrf_token %}
+       <fieldset>
+          <legend>enter the chessgames.com link for the game</legend>
+          <p>
+       <input type="text" name="gamelink">
+    </form>
+</center>
 
 
 
